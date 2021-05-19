@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+ <title>{% block title %}Home{% endblock %}</title></head>
+
+
+{% block content %}
+
+ <br>
+ <br> 
+ 
+<div class="container">
+    <h3>All Request</h3><hr>
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-3">
+            <div class="m-4">
+            <h4 style="color:blue;">{{order.name}}</h4>
+            <h4>{{order.city}}</h4>
+            <p class="mt-3">Currrent situation:  {{order.currrent_situation}}</p>
+            <p class="mt-3">Request made {{order.created_at|timesince}} ago</p>
+            <p class="mt-3">Request status:  {{order.order_status}}</p>
+            <a href="{% url 'plasmadonor:managerequest' order.id %}?action=acc" class="btn btn-primary"> Accept</a>
+            <a href="{% url 'plasmadonor:managerequest' order.id %}?action=rmv" class="btn btn-primary"> Decline</a>
+            </div>
+        </div>
+        {% empty %}
+        <h4 class="col-md-6 offset-md-3"> No Record Found</h4>
+        {% endfor %}
+ </div>
+</div>
+  
+{% endblock %}
