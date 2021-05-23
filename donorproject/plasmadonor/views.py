@@ -61,8 +61,8 @@ class Requestview(CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        url_slug = self.kwargs['slug']
-        donor = Donor.objects.get(slug=url_slug)
+        url_slug = self.kwargs['d_id']
+        donor = Donor.objects.get(id=url_slug)
         context['donor'] = donor
         return context
     
@@ -75,8 +75,8 @@ class Requestview(CreateView):
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
-        url_slug = self.kwargs['slug']
-        donor=Donor.objects.get(slug=url_slug)
+        url_slug = self.kwargs['d_id']
+        donor=Donor.objects.get(id=url_slug)
         if donor.d_user==self.request.user.customer:
             messages.success(self.request, 'OOPS!!! You cannot send request to yourself')
             return redirect("/explore")
@@ -85,6 +85,7 @@ class Requestview(CreateView):
             requests.create_by=self.request.user.customer
             requests.donor=donor
             requests.save()
+            messages.success(self.request, 'Congratulations!!! You have succesfuly made request to the donor.')
             return super().form_valid(form)
     
 class CustomerRegistrationView(CreateView):
@@ -140,12 +141,22 @@ class allrequestview(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         name=self.request.user.customer
-        orders = requests.objects.filter(donor__d_user=name).order_by("-id")
+        exclude_list = ["Request Accepted", "Request Cancelled"]
+        orders = requests.objects.filter(donor__d_user=name).exclude(Q(order_status="Request Accepted") | Q(order_status="Request Cancelled")).order_by("-id")
         context["orders"] = orders
         return context
 
 
-
+class acceptedrequests(TemplateView):
+    template_name = "acceptedrequests.html"
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name=self.request.user.customer
+        accepted = requests.objects.filter(donor__d_user=name).exclude(order_status="Request Pending").order_by("-id")
+        context["accepted"] = accepted
+        return context
 
 
 class managerequestview(View):
@@ -206,4 +217,4 @@ class managedonorview(View):
             donor_obj.delete()
         else:
             pass
-        return redirect("plasmadonor:mydonorview")
+        return redirect("plasmadonor:managedonor")
