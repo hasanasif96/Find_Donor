@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+ <title>{% block title %}Home{% endblock %}</title></head>
+
+
+{% block content %}
+
+ <br>
+ <br> 
+ 
+<div class="col-md-6 mx-auto">
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Search Plasma Donor</h5>
+    <p class="card-text">Find a plasma donor in your city and contact them directly.</p>
+    <a href="{% url 'plasmadonor:explore' %}" class="btn btn-primary">Explore</a>
+  </div>
+</div>
+      
+      
+ <br>
+ <br>   
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Register as a Donor</h5>
+    <p class="card-text">Become a donor to help others.</p>
+    <a href="{% url 'plasmadonor:registerdonor' %}" class="btn btn-primary">Register</a>
+  </div>
+</div>
+</div>
+  
+{% endblock %}
