@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Accepted Requests{% endblock %}
+
+
+
+{% block content %}
+
+
+
+<div class="card text-center">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'plasmadonor:allrequest'  %}">Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="true" href="{% url 'plasmadonor:acceptedrequests'  %}">Accepted Requests</a>
+      </li>
+    </ul>
+  </div>
+    <div class="container">
+    <h3>Previously Accepted Requests</h3><hr>
+    <div class="row">
+        {% for ord in accepted %}
+        <div class="col-md-3">
+            <div class="m-4">
+            <h4 style="color:blue;">{{ord.name}}</h4>
+            <h4>{{ord.city}}</h4>
+            <p class="mt-3">Currrent situation:  {{ord.currrent_situation}}</p>
+            <p class="mt-3">Request made {{ord.created_at|timesince}} ago</p>
+            <p class="mt-3">Request status:  {{ord.order_status}}</p>
+            </div>
+        </div>
+         
+        {% empty %}
+        <h4 class="col-md-6 offset-md-3"> No Request accepted Yet</h4>
+        {% endfor %}
+ </div>
+
+</div>
+</div>
+
+
+{% endblock %}
