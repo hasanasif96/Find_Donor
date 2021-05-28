@@ -10,6 +10,18 @@
 <div class="container">
     <h3>All Donors</h3><hr>
     <div class="row">
+         <div class="col-sm-1">
+           <h4>Filters: </h4>
+         </div>
+         <div class="col-sm-11">
+           <form action="" method="get">
+                {{donorfilter.form}}
+                <button class="btn btn-primary">Search</button>
+            </form>
+        </div>
+           
+    </div> 
+    <div class="row">
         {% for donor in alldonors %}
         <div class="col-md-3">
             <div class="m-4">
@@ -20,6 +32,8 @@
             <a href="{% url 'plasmadonor:request' donor.id %}" class="btn btn-primary">Request For Plasma</a>
             </div>
         </div>
+        {% empty %}
+        <h4 class="col-md-6 offset-md-3"> No Donor found as per your filter. </h4>
         {% endfor %}
  </div>
 </div>
