@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from .forms import *
 from django.db.models import Q
 from django.contrib import messages
+from .filters import DonorFilter
 
 
 
@@ -29,7 +30,12 @@ class explore(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['alldonors'] = Donor.objects.all()
+        donor=Donor.objects.all()
+        
+        donorfilter=DonorFilter(self.request.GET, queryset=donor)
+        donor=donorfilter.qs
+        context['donorfilter']=donorfilter
+        context['alldonors'] = donor
         return context
     
     
